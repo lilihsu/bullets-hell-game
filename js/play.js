@@ -8,11 +8,17 @@ var bullets;
 var bulletTime=0;
 var fireButton;
 
+var enemyBullets;
+var enemyBulletTime=0;
+
 var enemies;
 
 var score = 0;
 var scoreText;
 var winText;
+
+var playerLife=5;
+var lifeText;
 
 var playState = {
     preload:function(){
@@ -22,12 +28,12 @@ var playState = {
     create:function(){
     spacefield= game.add.tileSprite(0,0,800,600,'startfield');
     backgroundv = 5;
-        
+    game.physics.startSystem(Phaser.Physics.ARCADE);
     player =game.add.sprite(game.world.centerX,game.world.centerY+200, 'player');
     game.physics.enable(player,Phaser.Physics.ARCADE);
-
     cursors = game.input.keyboard.createCursorKeys();
 
+    //create bullet
     bullets = game.add.group();
     bullets.enableBody=true;
     bullets.physicsBodyType= Phaser.Physics.ARCADE;
@@ -37,6 +43,17 @@ var playState = {
     bullets.setAll('outOfBoundsKill',true);
     bullets.setAll('checkWorldBounds',true);
     
+    //create enemyBullet
+    enemyBullets =game.add.group();
+    enemyBullets.enableBody=true;
+    enemyBullets.physicsBodyType=Phaser.Physics.ARCADE;
+    enemyBullets.createMultiple(30,'enemyBullet');
+    enemyBullets.setAll('anchor.x',0.5);
+    enemyBullets.setAll('anchor.y',1);
+    enemyBullets.setAll('outOfBoundsKill',true);
+    enemyBullets.setAll('checkWorldBounds',true);
+    
+
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     enemies =game.add.group();
@@ -46,6 +63,7 @@ var playState = {
     createEnemies();
 
     scoreText = game.add.text(0,550,'Score:',{font: '32px Arial',fill: '#fff'});
+    lifeText = game.add.text(0,20,'Life:',{font: '32px Arial',fill: '#fff'});
     winText = game.add.text(game.world.centerX,game.world.centerY,'You win!',{font: '32px Arial',fill:'#fff'});
     winText.visible =false;
     },
@@ -53,6 +71,7 @@ var playState = {
     update:function(){
 
         game.physics.arcade.overlap(bullets,enemies,collisionHandler,null,this);
+        game.physics.arcade.overlap(enemyBullets,player,enemyCollisionHandler,null,this);
 
         player.body.velocity.x=0;
         spacefield.tilePosition.y+=backgroundv;
@@ -66,12 +85,16 @@ var playState = {
 
         if(fireButton.isDown){
             firebullet();
+            
         }
+        enemyFireBullet();
 
         scoreText.text ='Score:' +score;
-        if(score == 4000){
+        lifeText.text = 'Life:' +playerLife;
+        if(score == 3200){
             winText.visible =true;
             scoreText.visible =false;
+            game.state.start('end');
         }
 
     }
@@ -79,7 +102,7 @@ var playState = {
 
 function firebullet(){
     if(game.time.now>bulletTime){
-        bullet = bullets.getFirstExists(false);
+        var bullet = bullets.getFirstExists(false);
         if(bullet){
             bullet.reset(player.x,player.y);
             bullet.body.velocity.y =-400;
@@ -88,9 +111,24 @@ function firebullet(){
     }
 }
 
+function enemyFireBullet(){
+    if(game.time.now>enemyBulletTime){
+        var enemyBullet = enemyBullets.getFirstExists(false);
+        if(enemyBullet){
+            
+            enemyBullet.reset(enemies.x,enemies.y);
+            enemyBullet.body.velocity.y =400;
+            enemyBulletTime=game.time.now+200;
+        }
+           
+        
+    }
+}
+
+
 function createEnemies(){
-    for(var y =0;y<4;y++){
-        for(var x=0;x<10;x++){
+    for(var y =0;y<1;y++){
+        for(var x=0;x<1;x++){
             var enemy = enemies.create(x*48,y*50,'enemy');
             enemy.anchor.setTo(0.5,0.5);
         }
@@ -112,4 +150,9 @@ function collisionHandler(bullet,enemy){
     enemy.kill();
 
     score +=100;
+}
+
+function enemyCollisionHandler(enemyBullet,player){
+    enemyBullet.kill();
+
 }

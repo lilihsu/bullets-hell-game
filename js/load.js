@@ -10,6 +10,7 @@ var loadState ={
         game.load.image('startfield',"assets/startfield.jpg");
         game.load.image('player',"assets/player.png");
         game.load.image('bullet',"assets/beam.png");
+        game.load.image('enemyBullet',"assets/enemy_bullet.png");
         game.load.image('enemy',"assets/enemyShip.png");
     },
     create:function(){
