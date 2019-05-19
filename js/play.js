@@ -127,8 +127,8 @@ function enemyFireBullet(){
 
 
 function createEnemies(){
-    for(var y =0;y<1;y++){
-        for(var x=0;x<1;x++){
+    for(var y =0;y<8;y++){
+        for(var x=0;x<10;x++){
             var enemy = enemies.create(x*48,y*50,'enemy');
             enemy.anchor.setTo(0.5,0.5);
         }
@@ -152,7 +152,7 @@ function collisionHandler(bullet,enemy){
     score +=100;
 }
 
-function enemyCollisionHandler(enemyBullet,player){
+function enemyCollisionHandler(player,enemyBullet){
     enemyBullet.kill();
-
+    game.camera.shake(0.005,100);
 }
