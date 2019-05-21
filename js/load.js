@@ -11,6 +11,7 @@ var loadState ={
         game.load.image('bullet',"assets/beam.png");
         game.load.image('enemyBullet',"assets/enemy_bullet.png");
         game.load.image('heart',"assets/heart.png");
+        game.load.image('pixel','assets/pixel.png');
         game.load.spritesheet('player',"assets/Lightning.png",32,32);
         game.load.spritesheet('enemy','assets/Paranoid.png',32,32);
         game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);

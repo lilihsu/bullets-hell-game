@@ -7,6 +7,7 @@ var cursors;
 var bullets;
 var bulletTime=0;
 var fireButton;
+var skillButton;
 
 var enemyBullets;
 var enemyBulletTime=0;
@@ -23,6 +24,14 @@ var stateText;
 var playerLife=5;
 var lives;
 
+var leveupTime=1000;
+
+var skill=0;
+var skillText;
+var skillString='';
+
+var emitter;
+
 var playState = {
     preload:function(){
         
@@ -35,7 +44,15 @@ var playState = {
     player =game.add.sprite(game.world.centerX,game.world.centerY+200, 'player');
     game.physics.enable(player,Phaser.Physics.ARCADE);
     cursors = game.input.keyboard.createCursorKeys();
+    // create emitter
 
+    emitter=game.add.emitter(0,0,1000);
+    emitter.makeParticles('pixel');
+    emitter.setYSpeed(-150,150);
+    emitter.setXSpeed(-150,150);
+
+    emitter.setScale(2,0,2,0,800);
+    emitter.gravity =0;
     //player animation
     player.animations.add('playerfly',[0,1,2,3],20,true);
     player.play('playerfly');
@@ -43,7 +60,7 @@ var playState = {
     bullets = game.add.group();
     bullets.enableBody=true;
     bullets.physicsBodyType= Phaser.Physics.ARCADE;
-    bullets.createMultiple(30,'bullet');
+    bullets.createMultiple(3000,'bullet');
     bullets.setAll('anchor.x',0.5);
     bullets.setAll('anchor.y',1);
     bullets.setAll('outOfBoundsKill',true);
@@ -59,8 +76,8 @@ var playState = {
     enemyBullets.setAll('outOfBoundsKill',true);
     enemyBullets.setAll('checkWorldBounds',true);
     
-
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    skillButton = game.input.keyboard.addKey(Phaser.Keyboard.Z);
     //create enemy
     enemies =game.add.group();
     enemies.enableBody=true;
@@ -72,7 +89,10 @@ var playState = {
     scoreText = game.add.text(0,550,scoreString+score,{font: '32px Arial',fill: '#fff'});
     //life
     lives=game.add.group();
-    
+    //skill
+    skillString ='Skill : ';
+    skillText = game.add.text(0,50,scoreString+score,{font: '32px Arial',fill: '#fff'});
+
     stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
     stateText.anchor.setTo(0.5, 0.5);
     stateText.visible = false;
@@ -103,15 +123,26 @@ var playState = {
                 player.body.velocity.x=350;
             }
     
-    
+            //console.log(fireButton.isDown);
             if(fireButton.isDown){
                 firebullet();
                 
             }
+            console.log(skillButton.isDown);
+            if(skillButton.isDown&&skill>0){
+                fireSkill();
+            }
             if(game.time.now>enemyBulletTime){
                 enemyFireBullet();
             }
-    
+            
+            if(score>=1000){
+                leveupTime=100;
+            }
+            if(score==1000){
+                skill=2;
+                skillText.text = skillString+skill;
+            }
             game.physics.arcade.overlap(bullets,enemies,collisionHandler,null,this);
             game.physics.arcade.overlap(enemyBullets,player,enemyCollisionHandler,null,this);
         }
@@ -127,7 +158,27 @@ function firebullet(){
             bullet.reset(player.x,player.y);
             bullet.body.velocity.y =-400;
             bulletTime = game.time.now+200;
+            emitter.x=bullet.x;
+            emitter.y=bullet.y;
+            emitter.start(true,3000,null,15);
         }
+    }
+}
+function fireSkill(){
+    if(game.time.now>bulletTime){
+        for (let i = 0; i < 10; i++) {
+            var bullet = bullets.getFirstExists(false);
+            if(bullet){
+                bullet.reset(player.x,player.y);
+                const speed = 400;
+                let theta = game.rnd.frac() * 3.1415 / 2 - 3.1415 * 3 / 4;
+                bullet.body.velocity.y = speed * Math.sin(theta);
+                bullet.body.velocity.x = speed * Math.cos(theta);
+            }
+        }
+        bulletTime = game.time.now+200;
+        skill-=1;
+        skillText.text = skillString+skill;
     }
 }
 
@@ -154,7 +205,10 @@ function enemyFireBullet(){
         enemyBullet.reset(shooter.body.x, shooter.body.y);
 
         game.physics.arcade.moveToObject(enemyBullet,player,120);
-        enemyBulletTime = game.time.now + 1000;
+        enemyBulletTime = game.time.now + leveupTime;
+        emitter.x=enemyBullet.x;
+        emitter.y=enemyBullet.y;
+        emitter.start(true,1000,null,15);
     }
            
         
@@ -175,7 +229,6 @@ function createEnemies(){
             enemy.anchor.setTo(0.5,0.5);
             enemy.animations.add('fly',[0,1,2,3],20,true);
             enemy.play('fly');
-            console.log('enemy');
             enemy.body.moves=false;
             
         }
