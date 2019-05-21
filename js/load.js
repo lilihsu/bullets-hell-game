@@ -8,10 +8,13 @@ var loadState ={
         game.load.setPreloadSprite(progressBar);
 
         game.load.image('startfield',"assets/startfield.jpg");
-        game.load.image('player',"assets/player.png");
         game.load.image('bullet',"assets/beam.png");
         game.load.image('enemyBullet',"assets/enemy_bullet.png");
-        game.load.image('enemy',"assets/enemyShip.png");
+        game.load.image('heart',"assets/heart.png");
+        game.load.spritesheet('player',"assets/Lightning.png",32,32);
+        game.load.spritesheet('enemy','assets/Paranoid.png',32,32);
+        game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
+        
     },
     create:function(){
         game.state.start('menu');

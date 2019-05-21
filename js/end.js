@@ -21,7 +21,6 @@ var endState = {
     },
     start: function() {
         // Start the actual game
-        winText.visible =false;
         scoreText.visible =true;
         score=0;
         game.state.start('menu');
