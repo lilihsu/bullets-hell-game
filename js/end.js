@@ -1,9 +1,9 @@
 var endState = {
     create: function() {
         // Add a background image
-       // game.add.image(0, 0, 'background');
+        game.add.image(0, 0, 'background');
         // Display the name of the game
-        var nameLabel = game.add.text(game.width/2, 80, 'bullets Hell',
+        var nameLabel = game.add.text(game.width/2, 80, ' Game over!!!',
         { font: '50px Arial', fill: '#ffffff' });
         nameLabel.anchor.setTo(0.5, 0.5);
         // Show the score at the center of the screen
