@@ -24,7 +24,7 @@
 
 ## Website Detail Description
 
-# 作品網址：[xxxx]
+# 作品網址：https://106062205.gitlab.io/assingment-2
 
 # Components Description : 
 1. game process : 一開始會在主畫面，之後按上會進入遊戲，遊戲結束後就會跳轉進結束畫面，再按一次上就會回到遊戲主面。
