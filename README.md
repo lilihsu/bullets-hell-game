@@ -1,26 +1,4 @@
-# Software Studio 2019 Spring Midterm Project
-## Notice
-* Replace all [xxxx] to your answer
 
-## Topic
-* Project Name : Raiden
-
-## Basic Components
-|Component|Score|Y/N|
-|:-:|:-:|:-:|
-|Complete game process|15%|Y|
-|Basic rule|20%|Y|
-|Jucify mechanisms|15%|Y|
-|Animation|10%|Y|
-|Particle Systems|10%|Y|
-|Sound effects|5%|N|
-|UI|5%|Y|
-|Leaderboard|5%|N|
-
-## Advanced Components
-|Component|Score|Y/N|
-|:-:|:-:|:-:|
-|Bonus ||N|
 
 ## Website Detail Description
 
